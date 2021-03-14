@@ -1,0 +1,1 @@
+/usr/bin/c++.exe -g  -Wl,--enable-auto-import CMakeFiles/stack__array_.dir/main.cpp.o  -o stack__array_.exe -Wl,--out-implib,libstack__array_.dll.a -Wl,--major-image-version,0,--minor-image-version,0 
