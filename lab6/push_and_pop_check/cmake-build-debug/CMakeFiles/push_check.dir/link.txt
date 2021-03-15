@@ -1,0 +1,1 @@
+/usr/bin/c++.exe -g  -Wl,--enable-auto-import CMakeFiles/push_check.dir/main.cpp.o  -o push_check.exe -Wl,--out-implib,libpush_check.dll.a -Wl,--major-image-version,0,--minor-image-version,0 

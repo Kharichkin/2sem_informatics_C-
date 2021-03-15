@@ -1,32 +1,61 @@
 #include <iostream>
 using namespace std;
 
-int create_empty_array(){
-    int * array = new int[0];
-    return *array;
+struct Stack{
+    int * array;
+    unsigned int len;
+    unsigned int max_len;
+};
+
+Stack create_empty_stack(){
+    Stack * stack = new Stack;
+    stack->array = new int[2];
+    stack->len = 0;
+    stack->max_len = 2;
+    return *stack;
 }
 
-void push(int * array, int value){
-    int * next = new int;
-    next = (& array[sizeof(array)/sizeof(int) - 1]) + 1;
-    *next = value;
+void push(Stack * stack, int value){
+    if (stack->len == stack->max_len){
+        int* temp = stack->array;
+        stack->max_len = stack->max_len * 2;
+        stack->array = new int[stack->max_len];
+        for (int i = 0; i < stack->len; i++){
+            stack->array[i] = temp[i];
+        }
+        delete [] temp;
+    }
+    stack->array[stack->len] = value;
+    stack->len++;
 }
 
-void pop(int * array){
-    delete & array[sizeof(array)/sizeof(int) - 1];
+void pop(Stack * stack){
+    if (stack->len - 1 == stack->max_len/2){
+        int* temp = stack->array;
+        stack->max_len = stack->max_len / 2;
+        stack->array = new int[stack->max_len];
+        for (int i = 0; i < stack->len; i++){
+            stack->array[i] = temp[i];
+        }
+        delete [] temp;
+    }
+    stack->len--;
 }
 
-void print_array(int * array){
-    for (int i = 0; i < sizeof(array)/sizeof(int); i++){
-        cout << array[i] << " ";
+void print_stack(Stack * stack){
+    for (int i = 0; i < stack->len; i++){
+        cout << stack->array[i] << " ";
     }
 }
 
 int main() {
-    int my_array = create_empty_array();
-    push(& my_array, 10);
-    push(& my_array, 20);
-    push(& my_array, 30);
-    print_array(& my_array);
+    Stack my_stack = create_empty_stack();
+    push(& my_stack, 10);
+    push(& my_stack, 20);
+    push(& my_stack, 30);
+    push(& my_stack, 40);
+    pop(& my_stack);
+    pop(& my_stack);
+    print_stack(& my_stack);
     return 0;
 }
