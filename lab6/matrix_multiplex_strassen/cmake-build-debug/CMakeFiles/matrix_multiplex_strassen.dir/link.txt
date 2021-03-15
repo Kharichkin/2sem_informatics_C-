@@ -1,0 +1,1 @@
+/usr/bin/c++.exe -g  -Wl,--enable-auto-import CMakeFiles/matrix_multiplex_strassen.dir/main.cpp.o  -o matrix_multiplex_strassen.exe -Wl,--out-implib,libmatrix_multiplex_strassen.dll.a -Wl,--major-image-version,0,--minor-image-version,0 
