@@ -2,9 +2,9 @@
 using namespace std;
 
 int main() {
-    const unsigned N = 3;
-    int A [N][N] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-    int B [N][N] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+    const unsigned N = 4;
+    int A [N][N] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
+    int B [N][N] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
     int C [N][N];
 
     for (int i = 0; i < N; i++){
