@@ -1,9 +1,10 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <chrono>
 using namespace std;
 
-const unsigned size = 3;
+const unsigned size = 256;
 const unsigned a_max = 100;
 
 int **multiplex(int **A, int **B, unsigned int size) {
@@ -64,9 +65,13 @@ int main() {
 
     int ** C;
 
+    auto start = chrono::steady_clock::now();
     C = multiplex(A, B, size);
+    auto finish = chrono::steady_clock::now();
 
     print_matrix(C, size);
+
+    cout << (finish - start).count();
 
     return 0;
 }

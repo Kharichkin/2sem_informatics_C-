@@ -1,9 +1,10 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <chrono>
 using namespace std;
 
-const unsigned size = 3;
+const unsigned size = 256;
 const unsigned a_max = 100;
 
 int **sum(int **A, int **B, unsigned int size, bool sign = true){
@@ -192,7 +193,9 @@ int main() {
 
     int ** C_compl;
 
+    auto start = chrono::steady_clock::now();
     C_compl = multiplex(A_compl, B_compl, complemented_size);
+    auto finish = chrono::steady_clock::now();
 
     delete [] A_compl;
     delete [] B_compl;
@@ -204,6 +207,8 @@ int main() {
     delete [] C_compl;
 
     print_matrix(C, size);
+
+    cout << (finish - start).count();
 
     return 0;
 }
