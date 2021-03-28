@@ -9,4 +9,8 @@
 /cygdrive/d/Me/MIPT/Informatics CPP/lab6/matrix_multiplex_strassen/main.cpp
 iostream
 -
+cstdlib
+-
+ctime
+-
 

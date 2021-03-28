@@ -1,23 +1,72 @@
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 using namespace std;
 
-int main() {
-    const unsigned N = 4;
-    int A [N][N] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
-    int B [N][N] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
-    int C [N][N];
+const unsigned size = 3;
+const unsigned a_max = 100;
 
-    for (int i = 0; i < N; i++){
-        for (int j = 0; j < N; j++){
+int **multiplex(int **A, int **B, unsigned int size) {
+    int **C = new int *[size];
+
+    for (int i = 0; i < size; i++){
+        C[i] = new int[size];
+
+        for (int j = 0; j < size; j++){
             C[i][j] = 0;
-            for (int k = 0; k < N; k++){
+            for (int k = 0; k < size; k++){
                 C[i][j] += A[i][k] * B[k][j];
             }
+        }
+    }
 
-            cout << C[i][j] << " ";
+    return C;
+}
+
+void print_matrix(int ** A, unsigned int size){
+    for (int i = 0; i < size; i++){
+        for (int j = 0; j < size; j++){
+            cout << A[i][j] << " ";
         }
         cout << "\n";
     }
+    cout << "\n";
+}
+
+int random(int a){
+    int result = rand() % (a + 1);
+    if (rand() % 2 == 1){
+        result = - result;
+    }
+    return result;
+}
+
+void put_random(int ** A, unsigned int size){
+    for (int i = 0; i < size; i++){
+        A[i] = new int[size];
+        for (int j = 0; j < size; j++){
+            A[i][j] = random(a_max);
+        }
+    }
+}
+
+int main() {
+    srand(time(0));
+
+    int ** A = new int*[size];
+    int ** B = new int*[size];
+
+    put_random(A, size);
+    put_random(B, size);
+
+    print_matrix(A, size);
+    print_matrix(B, size);
+
+    int ** C;
+
+    C = multiplex(A, B, size);
+
+    print_matrix(C, size);
 
     return 0;
 }

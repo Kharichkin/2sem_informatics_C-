@@ -1,7 +1,10 @@
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 using namespace std;
 
-const unsigned N = 4;
+const unsigned size = 3;
+const unsigned a_max = 100;
 
 int **sum(int **A, int **B, unsigned int size, bool sign = true){
     int ** C = new int*[size];
@@ -82,7 +85,7 @@ int **multiplex(int **A, int **B, unsigned int size){
         C21 = sum(P2, P4, size/2);
         C22 = sum(sum(sum(P1, P2, size/2,false), P3, size/2), P6, size/2);
 
-        for (int i = 0; i < size / 2; i++) {
+        for (int i = 0; i < size; i++) {
             C[i] = new int[size];
 
             if (i < size / 2) {
@@ -121,31 +124,86 @@ void print_matrix(int ** A, unsigned int size){
         }
         cout << "\n";
     }
+    cout << "\n";
+}
+
+int random(int a){
+    int result = rand() % (a + 1);
+    if (rand() % 2 == 1){
+        result = - result;
+    }
+    return result;
+}
+
+void put_random(int ** A, unsigned int size){
+    for (int i = 0; i < size; i++){
+        A[i] = new int[size];
+        for (int j = 0; j < size; j++){
+            A[i][j] = random(a_max);
+        }
+    }
+}
+
+void complement(int ** A, int ** A_compl, unsigned int size, unsigned int complemented_size){
+    for (int i = 0; i < complemented_size; i++){
+        A_compl[i] = new int[complemented_size];
+        for (int j = 0; j < complemented_size; j++){
+            if ((i < size) && (j < size)){
+                A_compl[i][j] = A[i][j];
+            }
+            else{
+                A_compl[i][j] = 0;
+            }
+        }
+    }
+}
+
+void decomplement(int ** A, int ** A_compl, unsigned int size){
+    for (int i = 0; i < size; i++){
+        A[i] = new int[size];
+        for (int j = 0; j < size; j++){
+            A[i][j] = A_compl[i][j];
+        }
+    }
 }
 
 int main() {
-    int ** A = new int*[N];
-    A[0] = new int[N]{1, 2, 3, 4};
-    A[1] = new int[N]{5, 6, 7, 8};
-    A[2] = new int[N]{9, 10, 11, 12};
-    A[3] = new int[N]{13, 14, 15, 16};
-    cout << A[1][1];
-    int ** B = new int*[N];
-    B[0] = new int[N]{1, 2, 3, 4};
-    B[1] = new int[N]{5, 6, 7, 8};
-    B[2] = new int[N]{9, 10, 11, 12};
-    B[3] = new int[N]{13, 14, 15, 16};
+    srand(time(0));
 
-    int ** C;
+    int ** A = new int*[size];
+    int ** B = new int*[size];
 
-    /*int A[N][N] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
-    int B[N][N] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
-    int C[N][N];*/
+    put_random(A, size);
+    put_random(B, size);
 
+    print_matrix(A, size);
+    print_matrix(B, size);
 
-    /*C = multiplex(A, B, N);
+    unsigned int complemented_size = 1;
+    while (complemented_size < size){
+        complemented_size = complemented_size * 2;
+    }
 
-    print_matrix(C, N);*/
+    int ** A_compl = new int*[complemented_size];
+    int ** B_compl = new int*[complemented_size];
+
+    complement(A, A_compl, size, complemented_size);
+    complement(B, B_compl, size, complemented_size);
+
+    int ** C_compl;
+
+    C_compl = multiplex(A_compl, B_compl, complemented_size);
+
+    delete [] A_compl;
+    delete [] B_compl;
+
+    int ** C = new int*[size];
+
+    decomplement(C, C_compl, size);
+
+    delete [] C_compl;
+
+    print_matrix(C, size);
 
     return 0;
 }
