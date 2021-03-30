@@ -1,9 +1,10 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <chrono>
 using namespace std;
 
-const unsigned int size = 10;
+const unsigned int size = 100000;
 unsigned int a_max = 100;
 
 void print_array(int * array, unsigned int size){
@@ -60,8 +61,11 @@ int main() {
     put_random(array, size);
     print_array(array, size);
 
+    auto start = chrono::steady_clock::now();
     shaker_sort(array, size);
+    auto finish = chrono::steady_clock::now();
     print_array(array, size);
 
+    cout << (finish - start).count();
     return 0;
 }
