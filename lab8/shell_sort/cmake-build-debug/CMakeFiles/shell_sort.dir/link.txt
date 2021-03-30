@@ -1,0 +1,1 @@
+/usr/bin/c++.exe -g  -Wl,--enable-auto-import CMakeFiles/shell_sort.dir/main.cpp.o  -o shell_sort.exe -Wl,--out-implib,libshell_sort.dll.a -Wl,--major-image-version,0,--minor-image-version,0 

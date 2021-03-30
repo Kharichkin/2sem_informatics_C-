@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/cygdrive/d/Me/MIPT/Informatics CPP/lab8/bubble_sort/main.cpp
+iostream
+-
+cstdlib
+-
+ctime
+-
+
