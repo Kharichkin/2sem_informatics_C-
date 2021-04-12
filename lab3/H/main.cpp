@@ -10,15 +10,10 @@ struct Cat {
 
 Cat* get_home_for_a_cats_pride(unsigned int n) {
     Cat *cats = new Cat [n];
-    for (int i = 0; i < n; i++){
-        cats[i].name = new char [10];
-        cats[i].id = new unsigned int;
-    }
+    return cats;
 }
 void clear_home_of_a_cats_pride(Cat *cats, unsigned int n){
-    for (int i = 0; i < n; i++){
-        delete cats[i].id;
-    }
+    delete [] cats;
 }
 
 int main() {
@@ -32,6 +27,6 @@ int main() {
     for (int i = 0; i < n; i++)
         cout << a[i].name << " ";
     cout << endl;
-    clear_home_of_a_cats_pride(a, n);
+    /*clear_home_of_a_cats_pride(a, n);*/
     return 0;
 }
