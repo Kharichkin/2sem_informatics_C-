@@ -16,25 +16,6 @@ struct Tree{
     unsigned int number = 0;
 };
 
-void add_value(Tree * tree, int value){
-    Tree * current_tree = tree;
-    while (current_tree->number != 0){
-        if(value < current_tree->root->value){
-            current_tree->number++;
-            current_tree = current_tree->root->left;
-        }
-        else{
-            current_tree->number++;
-            current_tree = current_tree->root->right;
-        }
-    }
-    current_tree->number++;
-    current_tree->root = new Node;
-    current_tree->root->value = value;
-    current_tree->root->left = new Tree;
-    current_tree->root->right = new Tree;
-}
-
 bool find_value(Tree * tree, int value){
     bool is_here = false;
     Tree * current_tree = tree;
@@ -52,33 +33,6 @@ bool find_value(Tree * tree, int value){
     }
 
     return is_here;
-}
-
-void delete_value(Tree * tree, int value){
-    Tree * current_tree = tree;
-    while (current_tree->root->value != value){
-        if(value < current_tree->root->value){
-            current_tree->number--;
-            current_tree = current_tree->root->left;
-        }
-        else{
-            current_tree->number--;
-            current_tree = current_tree->root->right;
-        }
-    }
-
-    current_tree->number--;
-    if (current_tree->root->right->number == 0){
-        current_tree->root = current_tree->root->left->root;
-    }
-    else{
-        Tree * temporary_tree = current_tree->root->right;
-        while (temporary_tree->root->left->number != 0){
-            temporary_tree = temporary_tree->root->left;
-        }
-        temporary_tree->root->left = current_tree->root->left;
-        current_tree->root = current_tree->root->right->root;
-    }
 }
 
 vector<Node *> find_leaves(Tree * tree){
@@ -104,17 +58,21 @@ vector<Node *> find_leaves(Tree * tree){
 }
 
 int height(Tree * tree){
-    int current_height = 0;
-    if ((tree->root->left->number != 0) || (tree->root->right->number != 0)){
-        if (tree->root->left->number == 0){
-            current_height = height(tree->root->right) + 1;
+    int current_height;
+    if (tree->number > 0) {
+        current_height = 1;
+        if ((tree->root->left->number != 0) || (tree->root->right->number != 0)) {
+            if (tree->root->left->number == 0) {
+                current_height = height(tree->root->right) + 1;
+            } else if (tree->root->right->number == 0) {
+                current_height = height(tree->root->left) + 1;
+            } else {
+                current_height = max(height(tree->root->left), height(tree->root->right)) + 1;
+            }
         }
-        else if (tree->root->right->number == 0){
-            current_height = height(tree->root->left) + 1;
-        }
-        else{
-            current_height = max(height(tree->root->left), height(tree->root->right)) + 1;
-        }
+    }
+    else{
+        current_height = 0;
     }
 
     return current_height;
@@ -150,16 +108,156 @@ void postfix_traverse(Tree * tree){
     cout << tree->root->value << ' ';
 }
 
+void small_left_rotation(Tree * tree){
+    Node* tree_root = tree->root;
+    Node* subtree_root = tree->root->right->root;
+    Tree* right_tree = tree->root->right->root->right;
+    Tree* central_tree = tree->root->right->root->left;
+    Tree* left_tree = tree->root->left;
+
+    tree->root = subtree_root;
+    tree->root->right = right_tree;
+    tree->root->left = new Tree;
+    tree->root->left->number = left_tree->number + central_tree->number + 1;
+    tree->root->left->root = tree_root;
+    tree->root->left->root->right = central_tree;
+    tree->root->left->root->left = left_tree;
+}
+
+void big_left_rotation(Tree * tree){
+    Node* tree_root = tree->root;
+    Node* subtree_root = tree->root->right->root;
+    Node* subsubtree_root = tree->root->right->root->left->root;
+    Tree* right_tree = tree->root->right->root->right;
+    Tree* central_right_tree = tree->root->right->root->left->root->right;
+    Tree* central_left_tree = tree->root->right->root->left->root->left;
+    Tree* left_tree = tree->root->left;
+
+    tree->root = subsubtree_root;
+    tree->root->right = new Tree;
+    tree->root->left = new Tree;
+    tree->root->right->number = right_tree->number + central_right_tree->number + 1;
+    tree->root->left->number = left_tree->number + central_left_tree->number + 1;
+    tree->root->right->root = subtree_root;
+    tree->root->right->root->right = right_tree;
+    tree->root->right->root->left = central_right_tree;
+    tree->root->left->root = tree_root;
+    tree->root->left->root->left = left_tree;
+    tree->root->left->root->right = central_left_tree;
+}
+
+void small_right_rotation(Tree * tree){
+    Node* tree_root = tree->root;
+    Node* subtree_root = tree->root->left->root;
+    Tree* right_tree = tree->root->right;
+    Tree* central_tree = tree->root->left->root->right;
+    Tree* left_tree = tree->root->left->root->left;
+
+    tree->root = subtree_root;
+    tree->root->left = left_tree;
+    tree->root->right = new Tree;
+    tree->root->right->number = right_tree->number + central_tree->number + 1;
+    tree->root->right->root = tree_root;
+    tree->root->right->root->left = central_tree;
+    tree->root->right->root->right = right_tree;
+}
+
+void big_right_rotation(Tree * tree){
+    Node* tree_root = tree->root;
+    Node* subtree_root = tree->root->left->root;
+    Node* subsubtree_root = tree->root->left->root->right->root;
+    Tree* right_tree = tree->root->right;
+    Tree* central_right_tree = tree->root->left->root->right->root->right;
+    Tree* central_left_tree = tree->root->left->root->right->root->left;
+    Tree* left_tree = tree->root->left->root->left;
+
+    tree->root = subsubtree_root;
+    tree->root->right = new Tree;
+    tree->root->left = new Tree;
+    tree->root->right->number = right_tree->number + central_right_tree->number + 1;
+    tree->root->left->number = left_tree->number + central_left_tree->number + 1;
+    tree->root->right->root = tree_root;
+    tree->root->right->root->right = right_tree;
+    tree->root->right->root->left = central_right_tree;
+    tree->root->left->root = subtree_root;
+    tree->root->left->root->left = left_tree;
+    tree->root->left->root->right = central_left_tree;
+}
+
+void rebalance(Tree * tree){
+    if((height(tree->root->right) - height(tree->root->left)) == 2 && (height(tree->root->right->root->left) <= height(tree->root->right->root->right))){
+        small_left_rotation(tree);
+    }
+    if((height(tree->root->right) - height(tree->root->left)) == 2 && (height(tree->root->right->root->left) > height(tree->root->right->root->right))){
+        big_left_rotation(tree);
+    }
+    if((height(tree->root->left) - height(tree->root->right)) == 2 && (height(tree->root->left->root->right) <= height(tree->root->left->root->left))){
+        small_right_rotation(tree);
+    }
+    if((height(tree->root->left) - height(tree->root->right)) == 2 && (height(tree->root->left->root->right) > height(tree->root->left->root->left))){
+        big_right_rotation(tree);
+    }
+}
+
+void add_value(Tree * tree, int value){
+    Tree * current_tree = tree;
+    while (current_tree->number != 0){
+        if(value < current_tree->root->value){
+            current_tree->number++;
+            current_tree = current_tree->root->left;
+        }
+        else{
+            current_tree->number++;
+            current_tree = current_tree->root->right;
+        }
+    }
+    current_tree->number++;
+    current_tree->root = new Node;
+    current_tree->root->value = value;
+    current_tree->root->left = new Tree;
+    current_tree->root->right = new Tree;
+
+    rebalance(tree);
+}
+
+void delete_value(Tree * tree, int value){
+    Tree * current_tree = tree;
+    while (current_tree->root->value != value){
+        if(value < current_tree->root->value){
+            current_tree->number--;
+            current_tree = current_tree->root->left;
+        }
+        else{
+            current_tree->number--;
+            current_tree = current_tree->root->right;
+        }
+    }
+
+    current_tree->number--;
+    if (current_tree->root->right->number == 0){
+        current_tree->root = current_tree->root->left->root;
+    }
+    else{
+        Tree * temporary_tree = current_tree->root->right;
+        while (temporary_tree->root->left->number != 0){
+            temporary_tree = temporary_tree->root->left;
+        }
+        temporary_tree->root->left = current_tree->root->left;
+        current_tree->root = current_tree->root->right->root;
+    }
+
+    rebalance(tree);
+}
+
 int main() {
     Tree my_tree;
 
-    add_value(&my_tree, 3);
-    add_value(&my_tree, 2);
     add_value(&my_tree, 1);
-    add_value(&my_tree, 4);
     add_value(&my_tree, 6);
     add_value(&my_tree, 5);
-
+    add_value(&my_tree, 4);
+    add_value(&my_tree, 3);
+    add_value(&my_tree, 2);
 
 
     cout << "Infix traverse: ";
