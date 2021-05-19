@@ -1,0 +1,1 @@
+/usr/bin/c++.exe -g  -Wl,--enable-auto-import CMakeFiles/graph_edges_list.dir/main.cpp.o  -o graph_edges_list.exe -Wl,--out-implib,libgraph_edges_list.dll.a -Wl,--major-image-version,0,--minor-image-version,0 

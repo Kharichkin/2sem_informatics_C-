@@ -1,0 +1,1 @@
+/usr/bin/c++.exe -g  -Wl,--enable-auto-import CMakeFiles/medium.dir/main.cpp.o  -o medium.exe -Wl,--out-implib,libmedium.dll.a -Wl,--major-image-version,0,--minor-image-version,0 

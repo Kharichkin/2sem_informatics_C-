@@ -1,3 +1,0 @@
-/cygdrive/d/Me/MIPT/Informatics CPP/lab11/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/cygdrive/d/Me/MIPT/Informatics CPP/lab11/cmake-build-debug/CMakeFiles/edit_cache.dir
-/cygdrive/d/Me/MIPT/Informatics CPP/lab11/cmake-build-debug/CMakeFiles/lab11.dir
